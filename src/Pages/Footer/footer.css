@@ -1,0 +1,80 @@
+.footer-logo {
+  max-width: 150px;
+}
+
+.company-description {
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.titlefooter {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.ulfooter {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.ulfooter li {
+  margin-bottom: 10px;
+}
+
+.left-section {
+  margin-bottom: 30px;
+}
+
+.ulfooter li a {
+  text-decoration: none;
+  color: #a7a7a7;
+}
+ul li {
+  margin-bottom: 10px;
+}
+ul li a:hover {
+  color: #01926f;
+}
+.contact_footer {
+  width: calc(100%);
+  margin-right: 16px;
+}
+.social_icon {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.social_icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.footer_button {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.footer_button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.btn_hover:hover {
+  color: #083c64 !important;
+  font-weight: 600 !important;
+}
+.icon:hover {
+  color: #083c64 !important;
+}
+@media (max-width: 600px) {
+  .container {
+    padding: 10px 10px !important;
+  }
+  .footer-logo {
+    display: flex;
+    width: 100%;
+    max-width: 150px;
+    margin: 0 auto;
+  }
+  .contact_footer {
+    display: none;
+  }
+  .footer_button {
+    width: 130px !important;
+  }
+}

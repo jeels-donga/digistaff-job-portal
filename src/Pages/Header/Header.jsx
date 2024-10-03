@@ -1,107 +1,190 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { Button, Card, Menu, Typography } from "@material-tailwind/react";
 import Logo from "../../assets/img/logo.png";
+import config from "../../config";
+import { Box, Button, Card, Menu, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import Notification from "../../assets/svg/noti-icon.svg";
 import Profile from "../../assets/svg/profile.svg";
-import JobNoti from "../../assets/img/Job-noti.png";
-import config from "../../config";
+import { Link } from "react-router-dom";
+
 import "react-toastify/dist/ReactToastify.css";
-
-const Header = () => {
-    const [jobposts, setJobposts] = useState([]);
-    const [anchorEl, setAnchorEl] = useState(null);
+import JobNoti from "../../assets/img/Job-noti.png";
+import axios from "axios";
+import { toast } from "react-toastify";
+const Header = ({ }) => {
+    const page = 0;
+    const rowsPerPage = 3;
     const authenticated = localStorage.getItem("id");
+    // const [jobposts, setJobposts] = useState([]);
+    const [anchorEl, setAnchorEl] = useState(null);
     const openNoti = Boolean(anchorEl);
-
-    useEffect(() => {
-        if (authenticated) {
-            getJobpostdata();
-        }
-    }, [authenticated]);
-
-    const getJobpostdata = async () => {
-        try {
-            const response = await axios.get(`${config.apiUrl}/api/get_all_jobpost`);
-            setJobposts(response.data.data);
-        } catch (err) {
-            toast.error(err.response?.data?.error || "An error occurred", {
-                position: toast.POSITION.TOP_RIGHT,
-            });
-        }
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
     };
-
-    const handleClick = (event) => setAnchorEl(event.currentTarget);
-    const handleNotiClose = () => setAnchorEl(null);
+    const handleNotiClose = () => {
+        setAnchorEl(null);
+    };
+    // const getJobpostdata = () => {
+    //   axios
+    //     .get(`${config.apiUrl}/api/get_all_jobpost`)
+    //     .then((response) => {
+    //       const jobpostData = response.data.data;
+    //       setJobposts(jobpostData);
+    //     })
+    //     .catch((err) => {
+    //       toast.error(err.response.data.error, {
+    //         position: toast.POSITION.TOP_RIGHT,
+    //       });
+    //     });
+    // };
+    // useEffect(() => {
+    //   getJobpostdata();
+    // }, []);
 
     return (
-        <nav className="bg-white shadow-md">
-            <div className="container mx-auto px-4">
-                <div className="flex justify-between items-center py-4">
-                    <Link to="/" className="w-24">
-                        <img src={Logo} alt="Logo" className="w-full" />
-                    </Link>
-                    <div className="flex items-center space-x-4">
+        <>
+            <nav className="navb">
+                <Container>
+                    <div div className="grid grid-cols-2">
+                        <div className="logo w-[25%] mt-5">
+                            <Link to="/" >
+                                <img src={Logo} alt="Logo" />
+                            </Link>
+                        </div>
                         {!authenticated ? (
                             <>
-                                <Link to="/login">
-                                    <Button color="blue" variant="outlined">
-                                        Log In
-                                    </Button>
-                                </Link>
-                                <Link to="/register">
-                                    <Button color="blue" variant="filled">
-                                        Register
-                                    </Button>
-                                </Link>
+                                {/* <Box className="nav_btns">
+                                    <Link to="/login" style={{ textDecoration: "none" }}>
+                                        <Button id="login_text" variant="outlined">
+                                            Log In
+                                        </Button>
+                                    </Link>
+                                    <Link to="/register" style={{ textDecoration: "none" }}>
+                                        <Button id="login_text" variant="outlined">
+                                            Register
+                                        </Button>
+                                    </Link>
+                                </Box> */}
+                                <div className="flex justify-end self-center gap-5">
+                                    <Link to="/login" style={{ textDecoration: "none" }}>
+                                        <Button id="login_text" variant="outlined">
+                                            Log In
+                                        </Button>
+                                    </Link>
+                                    <Link to="/register" style={{ textDecoration: "none" }}>
+                                        <Button id="login_text" variant="outlined">
+                                            Register
+                                        </Button>
+                                    </Link>
+                                </div>
                             </>
                         ) : (
                             <>
-                                <Button onClick={handleClick}>
-                                    <img src={Notification} alt="Notification" className="w-6 h-6" />
-                                </Button>
-                                <Menu
-                                    open={openNoti}
-                                    handler={handleNotiClose}
-                                    placement="bottom-end"
-                                >
-                                    <Card className="w-96">
-                                        <Card className="m-1">
-                                            <Typography variant="h6" color="blue-gray" className="p-2">
+                                <div className="icon">
+                                    <Button
+                                        id="basic-button"
+                                        aria-controls={openNoti ? "basic-menu" : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={openNoti ? "true" : undefined}
+                                        onClick={handleClick}
+                                    >
+                                        <img src={Notification} alt="Notification" width="30px" />
+                                    </Button>
+                                    <Menu
+                                        id="basic-menu"
+                                        anchorEl={anchorEl}
+                                        open={openNoti}
+                                        onClose={handleNotiClose}
+                                        MenuListProps={{
+                                            "aria-labelledby": "basic-button",
+                                        }}
+                                    >
+                                        <Card
+                                            sx={{ width: "auto", height: "auto", border: "none" }}
+                                        >
+                                            <Typography
+                                                sx={{
+                                                    fontSize: "18px",
+                                                    fontWeight: "bold",
+                                                    paddingLeft: "1rem",
+                                                    fontFamily: "math",
+                                                }}
+                                            >
                                                 Notifications
                                             </Typography>
-                                            <hr className="my-2" />
-                                            <div className="p-2">
-                                                <div className="flex items-center space-x-4">
-                                                    <img src={JobNoti} alt="JobNoti" className="w-10 h-10" />
-                                                    <div>
-                                                        <Typography variant="h6" color="blue-gray">
+                                            <Card
+                                                sx={{
+                                                    width: "auto",
+                                                    height: "auto",
+                                                }}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        p: 1,
+                                                        gap: "1rem",
+                                                        alignItems: "center",
+                                                    }}
+                                                >
+                                                    <img
+                                                        src={JobNoti}
+                                                        alt="JobNoti"
+                                                        width="40px"
+                                                        height="40px"
+                                                    />
+                                                    <Box>
+                                                        <Typography
+                                                            sx={{
+                                                                fontWeight: "bold",
+                                                                fontSize: "15px",
+                                                                fontFamily: "math",
+                                                            }}
+                                                        >
                                                             New Jobs Arrival
                                                         </Typography>
-                                                        {jobposts.slice(0, 3).map((job, index) => (
-                                                            <Typography key={index} variant="small" color="gray" className="font-normal">
-                                                                {job.jobtitle || "N/A"}
-                                                            </Typography>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                        {/* {jobposts
+                                ?.slice(
+                                  page * rowsPerPage,
+                                  page * rowsPerPage + rowsPerPage
+                                )
+                                ?.map((val) => (
+                                  <Typography
+                                    sx={{
+                                      fontSize: "12px",
+                                      color: "grey",
+                                      fontFamily: "math",
+                                    }}
+                                  >
+                                    {!val?.jobtitle ? "N/A" : val?.jobtitle}
+                                  </Typography>
+                                ))} */}
+                                                        <Typography
+                                                            sx={{
+                                                                fontSize: "12px",
+                                                                color: "grey",
+                                                                fontFamily: "math",
+                                                            }}
+                                                        >
+                                                            title
+                                                            {/* {!val?.jobtitle ? "N/A" : val?.jobtitle} */}
+                                                        </Typography>
+                                                    </Box>
+                                                </Box>
+                                            </Card>
                                         </Card>
-                                    </Card>
-                                </Menu>
-                                <Link to="/editprofile">
-                                    <Button className="p-0">
-                                        <img src={Profile} alt="Profile" className="w-8 h-8" />
-                                    </Button>
-                                </Link>
+                                    </Menu>
+                                    <Link to="/editprofile" style={{ textDecoration: "none" }}>
+                                        <Button>
+                                            <img src={Profile} alt="Profile" width="32px" />
+                                        </Button>
+                                    </Link>
+                                </div>
                             </>
                         )}
                     </div>
-                </div>
-            </div>
-        </nav>
+                </Container >
+            </nav >
+        </>
     );
 };
 
