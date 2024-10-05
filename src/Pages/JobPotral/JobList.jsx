@@ -20,6 +20,8 @@ import {
     ArrowLeftIcon,
     ArrowRightIcon,
 } from "@heroicons/react/24/outline";
+import { ApplicationModal } from './ApplicationModel';
+import ApplyWithoutRegistrationModal from './ApplyWithoutRegistrationModal';
 
 const JobListingPage = () => {
     const [searchLocation, setSearchLocation] = useState('');
@@ -31,6 +33,10 @@ const JobListingPage = () => {
     const [selectedJobTypes, setSelectedJobTypes] = useState([]);
     const [selectedExperience, setSelectedExperience] = useState('');
     const [salaryRange, setSalaryRange] = useState([0, 200000]);
+    // const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedJob, setSelectedJob] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedJobId, setSelectedJobId] = useState(null);
 
     useEffect(() => {
         fetchJobs();
@@ -81,9 +87,38 @@ const JobListingPage = () => {
             prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
         );
     };
+    const handleApplyNow = (job) => {
+        const isLoggedIn = localStorage.getItem("id"); // Assuming you store user ID in localStorage when logged in
+        if (isLoggedIn) {
+            setSelectedJob(job);
+            setIsModalOpen(true);
+        } else {
+            setSelectedJobId(job.id);
+            setIsModalOpen(true);
+        }
+    };
+    // const openModal = (job) => {
+    //     setSelectedJob(job);
+    //     setIsModalOpen(true);
+    // };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedJob(null);
+        setSelectedJobId(null);
+    };
+
+    const handleSubmit = (values, { setSubmitting }) => {
+        console.log(values);
+        // Here you would typically send the form data to your backend
+        setSubmitting(false);
+        closeModal();
+    };
 
     return (
         <div className="container mx-auto px-4 py-8">
+            {/* ... (rest of the component remains the same) ... */}
+
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 <Card className="p-4 h-fit lg:sticky lg:top-4">
@@ -212,7 +247,9 @@ const JobListingPage = () => {
                                             View Details
                                         </Link>
                                     </Button>
-                                    <Button color="green" className="flex items-center">
+                                    <Button color="green" className="flex items-center"
+                                        onClick={() => handleApplyNow(job._id)}>
+                                        {/* onClick={() => openModal(job)}> */}
                                         Apply Now
                                     </Button>
                                 </div>
@@ -237,6 +274,19 @@ const JobListingPage = () => {
                         <Typography>Page {currentPage}</Typography>
                     </div>
                 </div>
+
+                <ApplicationModal
+                    isOpen={isModalOpen}
+                    onClose={closeModal}
+                    job={selectedJob}
+                    onSubmit={handleSubmit}
+                />
+
+                <ApplyWithoutRegistrationModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    jobId={selectedJobId}
+                />
             </div>
         </div>
     );
