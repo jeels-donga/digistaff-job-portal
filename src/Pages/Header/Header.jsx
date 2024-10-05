@@ -47,6 +47,35 @@ const Header = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    const NotificationMenu = () => (
+        <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={openNoti}
+            onClose={handleNotiClose}
+            MenuListProps={{
+                "aria-labelledby": "basic-button",
+            }}
+        >
+            <Card className="max-w-md shadow-lg">
+                <Typography className="font-bold text-lg p-4">Notifications</Typography>
+                {jobposts.length > 0 ? (
+                    jobposts.map((val, index) => (
+                        <div key={index} className="flex p-2 border-b last:border-b-0">
+                            <img src={JobNoti} alt="Job Notification" className="w-10 h-10 rounded-full" />
+                            <div className="ml-2">
+                                <Typography className="font-semibold">{val?.jobtitle || "N/A"}</Typography>
+                                <Typography className="text-gray-500 text-sm">New Jobs Arrival</Typography>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <Typography className="text-center p-4 text-gray-500">No new notifications</Typography>
+                )}
+            </Card>
+        </Menu>
+    );
+
     return (
         <Navbar className="mx-auto max-w-screen-xl bg-gradient-to-r px-4 py-2 lg:px-8 lg:py-4 shadow-lg">
             <div className="container mx-auto flex items-center justify-between text-white gap-5">
@@ -59,7 +88,7 @@ const Header = () => {
                             <Link to="/login">
                                 <Button
                                     variant="outlined"
-                                    className="w-[88px] bg-white text-black hover:bg-[#003E63] hover:text-white "
+                                    className="w-[88px] bg-white text-black hover:bg-[#003E63] hover:text-white"
                                 >
                                     Log In
                                 </Button>
@@ -67,7 +96,7 @@ const Header = () => {
                             <Link to="/register">
                                 <Button
                                     variant="outlined"
-                                    className="bg-white text-black hover:bg-[#003E63] hover:text-white "
+                                    className="bg-white text-black hover:bg-[#003E63] hover:text-white"
                                 >
                                     Register
                                 </Button>
@@ -81,49 +110,21 @@ const Header = () => {
                                 aria-haspopup="true"
                                 aria-expanded={openNoti ? "true" : undefined}
                                 onClick={handleClick}
-                                className="relative hover:bg-blue-500 transition-all rounded-full p-1"
+                                className="relative hover:bg-[#003E63] transition-all rounded-full p-1"
                             >
                                 <img src={Notification} alt="Notification" width="30px" />
                                 {jobposts.length > 0 && (
                                     <span className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">{jobposts.length}</span>
                                 )}
                             </Button>
-
-                            <Menu
-                                id="basic-menu"
-                                anchorEl={anchorEl}
-                                open={openNoti}
-                                onClose={handleNotiClose}
-                                MenuListProps={{
-                                    "aria-labelledby": "basic-button",
-                                }}
-                            >
-                                <Card className="max-w-md shadow-lg">
-                                    <Typography className="font-bold text-lg p-4">Notifications</Typography>
-                                    {jobposts.length > 0 ? (
-                                        jobposts.map((val, index) => (
-                                            <div key={index} className="flex p-2 border-b last:border-b-0">
-                                                <img src={JobNoti} alt="Job Notification" className="w-10 h-10 rounded-full" />
-                                                <div className="ml-2">
-                                                    <Typography className="font-semibold">{val?.jobtitle || "N/A"}</Typography>
-                                                    <Typography className="text-gray-500 text-sm">New Jobs Arrival</Typography>
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <Typography className="text-center p-4 text-gray-500">No new notifications</Typography>
-                                    )}
-                                </Card>
-                            </Menu>
-
+                            <NotificationMenu />
                             <Link to="/editprofile" style={{ textDecoration: "none" }}>
-                                <Button className="hover:bg-blue-500 transition-all rounded-full p-1">
+                                <Button className="hover:bg-[#003E63] transition-all rounded-full p-1">
                                     <img src={Profile} alt="Profile" width="32px" />
                                 </Button>
                             </Link>
                         </div>
                     )}
-
                     <IconButton
                         variant="text"
                         className="ml-auto h-6 w-6 text-white hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -142,7 +143,7 @@ const Header = () => {
                     </IconButton>
                 </div>
             </div>
-            <MobileNav open={openNav} className="bg-gradient-to-r from-blue-500 to-blue-700">
+            <MobileNav open={openNav} className="bg-gradient-to-r from-[#003E63] to-[#003E63]">
                 <div className="container mx-auto">
                     {authenticated ? (
                         <Link to="/profile" className="w-full">
@@ -162,6 +163,6 @@ const Header = () => {
             </MobileNav>
         </Navbar>
     );
-}
+};
 
 export default Header;
