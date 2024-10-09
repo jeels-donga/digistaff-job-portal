@@ -144,7 +144,7 @@ const JobListingPage = () => {
                         <Select
                             label="Experience Level"
                             value={selectedExperience}
-                            onChange={(value) => setSelectedExperience(value)}
+                            onChange={(e) => setSelectedExperience(e.target.value)}
                         >
                             <option value="">Any</option>
                             <option value="entry">Entry Level</option>
@@ -248,8 +248,7 @@ const JobListingPage = () => {
                                         </Link>
                                     </Button>
                                     <Button color="green" className="flex items-center"
-                                        onClick={() => handleApplyNow(job._id)}>
-                                        {/* onClick={() => openModal(job)}> */}
+                                        onClick={() => handleApplyNow(job)}>
                                         Apply Now
                                     </Button>
                                 </div>
@@ -284,7 +283,7 @@ const JobListingPage = () => {
 
                 <ApplyWithoutRegistrationModal
                     isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
+                    onClose={closeModal}
                     jobId={selectedJobId}
                 />
             </div>
