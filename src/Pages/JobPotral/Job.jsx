@@ -4,7 +4,8 @@ import Frame from "../../assets/svg/Frame.svg";
 import "./Job.css";
 // import JobFilter from './JobFilter';
 import JobListingPage from './JobList';
-import JobListingPages from './JobListingApi';
+// import JobListingPages from './JobListingApi';
+// import JobViewPage from './JobViewPage';
 
 const Job = () => {
     return (
@@ -33,6 +34,7 @@ const Job = () => {
                 <Container>
                     {/* <JobFilter /> */}
                     <JobListingPage />
+                    {/* <JobViewPage /> */}
                     {/* <JobListingPages /> */}
                 </Container >
             </div >

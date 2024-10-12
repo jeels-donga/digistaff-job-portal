@@ -243,7 +243,8 @@ const JobListingPage = () => {
                                 </div>
                                 <div className="flex gap-4">
                                     <Button variant="outlined" className="flex items-center">
-                                        <Link to={`/jobs/${job.id}`} className="flex items-center">
+                                        {/* <Link to={`/jobs/:id`} className="flex items-center"> */}
+                                        <Link to={`/jobs/${job._id}`} className="flex items-center">
                                             View Details
                                         </Link>
                                     </Button>
