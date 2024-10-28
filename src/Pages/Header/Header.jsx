@@ -79,7 +79,7 @@ const Header = () => {
     return (
         <Navbar className="mx-auto max-w-screen-xl bg-gradient-to-r px-4 py-2 lg:px-8 lg:py-4 shadow-lg">
             <div className="container mx-auto flex items-center justify-between text-white gap-5">
-                <Link to="/" style={{ textDecoration: "none" }}>
+                <Link to="/jobs" style={{ textDecoration: "none" }}>
                     <img src={Logo} alt="Logo" className='w-[10%] md:w-[8%]' />
                 </Link>
                 <div className="flex items-center gap-x-2">
