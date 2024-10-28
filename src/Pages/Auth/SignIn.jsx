@@ -11,7 +11,7 @@ import {
     IconButton,
 } from "@material-tailwind/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import config from "../../config";
+import config from "../../config"; // Ensure this has the correct API URL
 import Logo from "../../assets/img/logo.png";
 import Hero from "../../assets/svg/hero.svg";
 
@@ -20,26 +20,64 @@ const SignIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false); // Loading state
+
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\\.,;:\s@\"]+\.)+[^<>()[\]\\.,;:\s@\"]{2,})$/
+            );
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const candidate = { email, password };
+
+        // Validation
         if (!candidate?.email) {
             toast.error("Please Enter Email");
+        } else if (!validateEmail(candidate?.email)) {
+            toast.error("Please enter a valid email address");
         } else if (!candidate?.password) {
             toast.error("Please Enter Password");
         } else {
+            setLoading(true); // Start loading
             try {
-                const result = await axios.post(`${config.apiUrl}/api/loginCandidate`, candidate);
+                // Log the request for debugging
+                console.log("Sending login request:", candidate);
+
+                const result = await axios.post(
+                    `${config.apiUrl}loginCandidate`,
+                    candidate,
+                    { timeout: 10000 } // Increase timeout to 10 seconds
+                );
+
+                console.log("Login response:", result);
+
+                // Store data in localStorage
                 localStorage.setItem("token", result.data.data.accessToken);
                 localStorage.setItem("id", result.data.data._id);
                 localStorage.setItem("email", result.data.data.email);
+
+                // Show success toast and navigate
                 toast.success(result.data.msg);
                 setTimeout(() => {
                     navigate("/");
                 }, 1000);
             } catch (err) {
-                toast.error(err?.response?.data?.msg || "Please check details");
+                console.error("Error logging in:", err); // Improved error handling
+                if (err?.response?.status === 401) {
+                    toast.error("Unauthorized: Incorrect email or password");
+                } else if (err?.response?.status === 500) {
+                    toast.error("Server error. Please try again later.");
+                } else if (err?.code === 'ECONNABORTED') {
+                    toast.error("Request timed out. Please try again later.");
+                } else {
+                    toast.error(err?.response?.data?.msg || "Please check details");
+                }
+            } finally {
+                setLoading(false); // Stop loading
             }
         }
     };
@@ -96,10 +134,12 @@ const SignIn = () => {
                             </div>
                             <Button
                                 type="submit"
-                                className="mt-6 bg-gradient-to-r from-blue-500 to-teal-500 hover:from-teal-500 hover:to-blue-500 text-white rounded-lg shadow-lg transition duration-200"
+                                className={`mt-6 bg-gradient-to-r from-blue-500 to-teal-500 hover:from-teal-500 hover:to-blue-500 text-white rounded-lg shadow-lg transition duration-200 ${loading ? "opacity-50 cursor-not-allowed" : ""
+                                    }`}
                                 fullWidth
+                                disabled={loading} // Disable button when loading
                             >
-                                Log In
+                                {loading ? "Logging in..." : "Log In"}
                             </Button>
                             <Typography color="gray" className="mt-4 text-center font-normal">
                                 Don't have an account?{" "}
